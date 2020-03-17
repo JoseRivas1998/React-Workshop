@@ -1,0 +1,11 @@
+.Star {
+    color: #a8a8a8;
+}
+
+.Star:hover {
+    cursor: pointer;
+}
+
+.active {
+    color: #fd0;
+}
