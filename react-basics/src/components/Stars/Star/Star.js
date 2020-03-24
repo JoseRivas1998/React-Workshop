@@ -11,6 +11,9 @@ const star = (props) => {
     }
     return (
         <FontAwesomeIcon 
+            onMouseEnter={props.hoverEnter}
+            onMouseLeave={props.hoverExit}
+            onClick={props.clicked}
             className={classList.join(' ')}
             icon={faStar} />
     );

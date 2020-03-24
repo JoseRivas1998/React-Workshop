@@ -5,9 +5,15 @@ const stars = (props) => {
     const stars = [];
 
     for (let i = 0; i < props.totalStars; i++) {
-        let active = Math.random() < 0.5;
+        let active = i <= props.selectedStar;
+        if (props.hoverStar >= 0) {
+            active = i <= props.hoverStar;
+        }
         stars.push(<Star 
             key={i}
+            hoverEnter={() => props.starHoverEnter(i)}
+            hoverExit={props.starHoverExit}
+            clicked={() => props.starClicked(i)}
             active={active} />)
     }
 
