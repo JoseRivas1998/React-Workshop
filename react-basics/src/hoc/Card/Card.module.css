@@ -1,0 +1,14 @@
+.Card {
+    width: 90%;
+    margin: 15px auto;
+    border: 1px solid #eee;
+    padding: 15px;
+    box-sizing: border-box;
+    box-shadow: 0 5px 10px #ddd;
+}
+
+@media (min-width: 1024px) {
+    .Card {
+        width: 960px;
+    }
+}

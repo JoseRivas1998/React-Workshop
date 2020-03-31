@@ -1,0 +1,31 @@
+.TextArea {
+    min-width: 100%;
+    max-width: 100%;
+    padding: 5px;
+    box-sizing: border-box;
+}
+
+.Label {
+    font-weight: bold;
+    display: block;
+    margin: 15px 0;
+}
+
+.Btn {
+    background-color: #007bff;
+    color: white;
+    padding: 12px 6px;
+    border: 1px solid #007bff;
+    border-radius: .25rem;
+    cursor: pointer;
+}
+
+.Btn:hover {
+    background-color: #0062cc;
+    border-color: #005cbf;
+}
+
+.Danger {
+    color: #e30000;
+    font-weight: bold;
+}
