@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-import { Col, Card, Form } from 'react-bootstrap';
+import { Col, Card, Form, Button, Alert } from 'react-bootstrap';
+import { connect } from 'react-redux';
 
 import * as inputTypes from '../../util/inputTypes';
 import FormGroup from '../../components/FormGroup/FormGroup';
+import * as actions from '../../store/actions/index';
 
 class SignUp extends Component {
     state = {
@@ -57,7 +59,7 @@ class SignUp extends Component {
         const updatedFormElement = {
             ...updatedForm[inputID]
         };
-        if(updatedFormElement.sanitize) {
+        if (updatedFormElement.sanitize) {
             updatedFormElement.value = updatedFormElement.sanitize(event.target.value);
         } else {
             updatedFormElement.value = event.target.value;
@@ -71,18 +73,23 @@ class SignUp extends Component {
             formIsValid = updatedForm[key].valid && formIsValid;
         }
 
-        this.setState({formElements: updatedForm, formIsValid: formIsValid});
+        this.setState({ formElements: updatedForm, formIsValid: formIsValid });
     };
 
     onFormSubmit = (event) => {
         event.preventDefault();
+        this.props.startSignup(
+            this.state.formElements.email.value,
+            this.state.formElements.displayName.value,
+            this.state.formElements.password.value
+        );
     };
 
     render() {
         const formElements = [];
         for (let key in this.state.formElements) {
             formElements.push({
-                id: key, 
+                id: key,
                 config: this.state.formElements[key]
             });
         }
@@ -94,19 +101,41 @@ class SignUp extends Component {
                         type={formElement.config.type}
                         label={formElement.config.label}
                         value={formElement.config.value}
-                        changed={(event) => {this.inputChangedHandler(event, formElement.id)}}
+                        changed={(event) => { this.inputChangedHandler(event, formElement.id) }}
                         valid={formElement.config.valid}
-                        touched={formElement.config.touched}/>
-                ); 
+                        touched={formElement.config.touched} />
+                );
             });
+        let warning = null;
+        if (this.props.signingUp) {
+            warning = (
+                <Alert variant="warning">
+                    Signing Up...
+                </Alert>
+            );
+        }
+        let error = null;
+        if (this.props.error) {
+            error = (
+                <Alert variant="danger">
+                    Error signing up, please try again.
+                </Alert>
+            );
+        }
         return (
-            <Col xs={12} md={{span: 6, offset: 3}}>
+            <Col xs={12} md={{ span: 6, offset: 3 }}>
                 <h2 className="text-center">Sign Up</h2>
                 <Card>
                     <Card.Body>
                         <Form onSubmit={this.onFormSubmit}>
                             {inputElements}
+                            <Button
+                                type="submit"
+                                variant="primary"
+                                disabled={!this.state.formIsValid}>Sign Up</Button>
                         </Form>
+                        {warning}
+                        {error}
                     </Card.Body>
                 </Card>
             </Col>
@@ -114,4 +143,17 @@ class SignUp extends Component {
     }
 }
 
-export default SignUp;
+const mapStateToProps = state => {
+    return {
+        signingUp: state.auth.signingUp,
+        error: state.auth.error
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        startSignup: (email, username, password) => dispatch(actions.signup(email, username, password))
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignUp);
